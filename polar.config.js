@@ -1,13 +1,13 @@
 const accounts = [
   {
     name: 'a',
-    address: 'secret1jhwpq5mn7edw6lfv7sadae7g0qaq2atgpakf5j',
-    mnemonic: 'auction finish supply wage icon praise prepare barrel recall bean van joke virtual connect only galaxy book twist post edit sport hamster build useful'
+    address: 'secret1ptuvyssd7rgspp0t6snsuxfy8txcpphl2m0map',
+    mnemonic: 'comfort kick wing fever utility bamboo lamp electric champion urban inquiry ten card erode silly ugly river select wreck citizen dwarf insect surface club'
   },
   {
     name: 'b',
-    address: 'secret17dgcylpm3wm6jawya9gzfv6hy9s7mnxhkkxrzf',
-    mnemonic: 'crouch menu badge sunset check spawn plate loan book smooth off text skull lab snack decide guitar submit frost now daring equip screen weekend'
+    address: 'secret1qvc4vald0jjh0wkhpjtt7vtrvhuq9fmxc5c9rc',
+    mnemonic: 'replace antenna twice first half cook bounce manage mistake that wish jungle radar aim hover syrup exchange bone into want work veteran float amount'
   }
 ];
 

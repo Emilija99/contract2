@@ -11,9 +11,9 @@ async function deploy_contract(contract_owner,contract){
 
 }
 
-async function instantiate_contract(contract_owner,contract){
+async function instantiate_contract(contract_owner,contract,snip_addr,snip_hash){
  
-  const contract_info = await contract.instantiate({}, "deploy test1", contract_owner);
+  const contract_info = await contract.instantiate({snip_addr,snip_hash}, "deploy test1", contract_owner);
   console.log(contract_info);
 }
 
@@ -61,12 +61,12 @@ async function run () {
   const transferAmount = [{denom: "uscrt", amount: "15000"}];
 
   await deploy_contract(contract_owner,contract);
-  await instantiate_contract(contract_owner,contract);
+  await instantiate_contract(contract_owner,contract,"secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg","E47144CD74E2E3E24275962CAA7719F081CCFA81A46532812596CA3D5BA6ECEB");
 
   await create_room(contract,contract_owner,"room1");
   await create_room(contract,contract_owner,"room2");
 
-  await register(contract,getAccountByName("a"),"secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg","E47144CD74E2E3E24275962CAA7719F081CCFA81A46532812596CA3D5BA6ECEB")
+  //await register(contract,getAccountByName("a"),"secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg","E47144CD74E2E3E24275962CAA7719F081CCFA81A46532812596CA3D5BA6ECEB")
 
   //await play(contract,getAccountByName("a"),"scissors",transferAmount,0);
   //await play(contract,getAccountByName("b"),"paper",transferAmount,0);

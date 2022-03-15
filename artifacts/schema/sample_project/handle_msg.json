@@ -5,31 +5,6 @@
     {
       "type": "object",
       "required": [
-        "play"
-      ],
-      "properties": {
-        "play": {
-          "type": "object",
-          "required": [
-            "move1",
-            "room_id"
-          ],
-          "properties": {
-            "move1": {
-              "$ref": "#/definitions/Move"
-            },
-            "room_id": {
-              "type": "integer",
-              "format": "uint64",
-              "minimum": 0.0
-            }
-          }
-        }
-      }
-    },
-    {
-      "type": "object",
-      "required": [
         "create_room"
       ],
       "properties": {
@@ -40,29 +15,6 @@
           ],
           "properties": {
             "room_title": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
-    {
-      "type": "object",
-      "required": [
-        "register"
-      ],
-      "properties": {
-        "register": {
-          "type": "object",
-          "required": [
-            "reg_addr",
-            "reg_hash"
-          ],
-          "properties": {
-            "reg_addr": {
-              "$ref": "#/definitions/HumanAddr"
-            },
-            "reg_hash": {
               "type": "string"
             }
           }
@@ -114,14 +66,6 @@
     },
     "HumanAddr": {
       "type": "string"
-    },
-    "Move": {
-      "type": "string",
-      "enum": [
-        "rock",
-        "paper",
-        "scissors"
-      ]
     },
     "Uint128": {
       "type": "string"

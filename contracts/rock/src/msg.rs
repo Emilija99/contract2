@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
 pub struct InitMsg {
-   
+    pub snip_addr: HumanAddr,
+    pub snip_hash: String,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
@@ -19,18 +20,11 @@ pub enum Move{
 #[serde(rename_all = "snake_case")]
 pub enum HandleMsg {
  
-    Play{
-        move1:Move,
-        room_id:u64
-      
-    },
+   
     CreateRoom{
         room_title:String
     },
-    Register{
-        reg_addr:HumanAddr,
-        reg_hash:String
-    },
+   
     Receive{
         sender:HumanAddr,
         from:HumanAddr,
@@ -95,18 +89,3 @@ pub enum Snip20Msg {
     }
 }
 
-impl Snip20Msg{
-    pub fn register_receive(code_hash: String) -> Self {
-        Snip20Msg::RegisterReceive {
-            code_hash,
-            padding: None, // TODO add padding calculation
-        }
-    }
-    pub fn transfer(recipient:String,amount:Uint128)->Self{
-        Snip20Msg::Transfer{
-            recipient,
-            amount,
-            padding:None
-        }
-    }
-}

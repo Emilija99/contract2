@@ -1,12 +1,11 @@
-use cosmwasm_std::{
-    from_slice, to_binary, to_vec, Api, BankMsg, Binary, Coin, CosmosMsg, Env, Extern,
-    HandleResponse, HumanAddr, InitResponse, Querier, StdResult, Storage, Uint128, WasmMsg, from_binary,
-};
-
 use crate::msg::{
-    AmountResponse, HandleMsg, InitMsg, Move, QueryMsg, RoomsResponse, Snip20Msg, WinnerResponse,PlayMsg
+    AmountResponse, HandleMsg, InitMsg, PlayMsg, QueryMsg, RoomsResponse, WinnerResponse,
 };
-use crate::state::{config, Player, Room, SnipState, config_read};
+use crate::state::{config, Player, Room, SnipState};
+use cosmwasm_std::{
+    from_binary, to_binary, to_vec, Api, Binary, Coin, Env, Extern, HandleResponse, HumanAddr,
+    InitResponse, Querier, StdError, StdResult, Storage, Uint128,
+};
 
 pub fn init<S: Storage, A: Api, Q: Querier>(
     deps: &mut Extern<S, A, Q>,
@@ -14,14 +13,13 @@ pub fn init<S: Storage, A: Api, Q: Querier>(
     msg: InitMsg,
 ) -> StdResult<InitResponse> {
     deps.storage.set(b"total", &to_vec(&0)?);
-    let snip_state=SnipState{
-        //known_snip_20:vec![]
-        addr:HumanAddr::default(),
-        hash:String::new()
+    let snip_state = SnipState {
+        addr: msg.snip_addr,
+        hash: msg.snip_hash,
     };
     config(&mut deps.storage).save(&snip_state)?;
 
-    Ok(InitResponse::default())
+    SnipState::register(deps, &env.contract_code_hash)
 }
 
 pub fn handle<S: Storage, A: Api, Q: Querier>(
@@ -30,9 +28,8 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
     msg: HandleMsg,
 ) -> StdResult<HandleResponse> {
     match msg {
-        HandleMsg::Play { move1, room_id } => try_play(deps, env, move1, room_id),
         HandleMsg::CreateRoom { room_title } => try_create(deps, env, room_title),
-        HandleMsg::Register { reg_addr, reg_hash } => try_register(deps, env, reg_addr, reg_hash),
+
         HandleMsg::Receive {
             sender,
             from,
@@ -45,7 +42,7 @@ pub fn handle<S: Storage, A: Api, Q: Querier>(
 
 pub fn try_create<S: Storage, A: Api, Q: Querier>(
     deps: &mut Extern<S, A, Q>,
-    env: Env,
+    _env: Env,
     room_title: String,
 ) -> StdResult<HandleResponse> {
     Room::create_room(deps, room_title)?;
@@ -53,130 +50,42 @@ pub fn try_create<S: Storage, A: Api, Q: Querier>(
     Ok(HandleResponse::default())
 }
 
-pub fn try_play<S: Storage, A: Api, Q: Querier>(
-    deps: &mut Extern<S, A, Q>,
-    env: Env,
-    move1: Move,
-    room_id: u64,
-) -> StdResult<HandleResponse> {
-    let mut room = Room::get_room(deps, room_id)?;
-    let sender_address_raw = deps.api.canonical_address(&env.message.sender)?;
-    room.play(
-        Player {
-            move1,
-            address: sender_address_raw,
-        },
-        calculate_amount(&env.message.sent_funds),
-    )?;
-    Room::update_room(deps, room_id, &room)?;
-    if room.is_finished {
-        return Ok(send_tokens(
-            env.contract.address,
-            deps.api.human_address(&room.winner.clone().unwrap())?,
-            room.amount,
-        ));
-    }
-
-    Ok(HandleResponse::default())
-}
-
-fn send_tokens(
-    from_address: HumanAddr,
-    to_address: HumanAddr,
-    total_amount: Uint128,
-) -> HandleResponse {
-    HandleResponse {
-        data: None,
-        log: vec![],
-        messages: vec![cosmwasm_std::CosmosMsg::Bank(BankMsg::Send {
-            from_address,
-            to_address,
-            amount: vec![Coin {
-                amount: total_amount,
-                denom: String::from("uscrt"),
-            }],
-        })],
-    }
-}
-
-pub fn try_register<S: Storage, A: Api, Q: Querier>(
-    deps: &mut Extern<S, A, Q>,
-    env: Env,
-    reg_addr: HumanAddr,
-    reg_hash: String,
-) -> StdResult<HandleResponse> {
-    let mut conf = config(&mut deps.storage);
-    let mut snip_state = conf.load()?;
-    /*if !snip_state.known_snip_20.contains(&reg_addr) {
-        snip_state.known_snip_20.push(reg_addr.clone());
-    }*/
-    snip_state.addr=reg_addr.clone();
-    snip_state.hash=reg_hash.clone();
-    conf.save(&snip_state)?;
-    let msg = to_binary(&Snip20Msg::register_receive(env.contract_code_hash))?;
-
-    let message = CosmosMsg::Wasm(WasmMsg::Execute {
-        contract_addr: reg_addr,
-        callback_code_hash: reg_hash,
-        msg,
-        send: vec![],
-    });
-
-    Ok(HandleResponse {
-        messages: vec![message],
-        log: vec![],
-        data: None,
-    })
-}
-
 pub fn try_receive<S: Storage, A: Api, Q: Querier>(
     deps: &mut Extern<S, A, Q>,
     env: Env,
-    _sender: HumanAddr,
+    sender: HumanAddr,
     from: HumanAddr,
     amount: Uint128,
     msg: Binary,
-)-> StdResult<HandleResponse> {
-
+) -> StdResult<HandleResponse> {
+    if env.message.sender.ne(&SnipState::get_addr(deps)?) {
+        return Err(StdError::generic_err(format!(
+            "Invalid tokens: {} {}",
+            sender.to_string(),
+            &SnipState::get_addr(deps)?
+        )));
+    }
     let msg: PlayMsg = from_binary(&msg)?;
     let mut room = Room::get_room(deps, msg.room_id)?;
-    let sender_address_raw=deps.api.canonical_address(&from)?;
+    let sender_address_raw = deps.api.canonical_address(&from)?;
     room.play(
         Player {
-            move1:msg.move1,
+            move1: msg.move1,
             address: sender_address_raw,
-           
         },
         amount,
     )?;
     Room::update_room(deps, msg.room_id, &room)?;
     if room.is_finished {
-        /*return Ok(send_tokens(
-            env.contract.address,
-            deps.api.human_address(&room.winner.clone().unwrap())?,
+        return SnipState::transfer(
+            deps.api.human_address(&room.winner.unwrap())?,
             room.amount,
-        ));*/
-        let msg=to_binary(&Snip20Msg::transfer(deps.api.human_address(&room.winner.unwrap())?.to_string(), room.amount))?;
-        let  conf = config_read(& deps.storage);
-        let  snip_state = conf.load()?;
-        //let addr=snip_state.known_snip_20.get(0).unwrap();
-        let message=CosmosMsg::Wasm(WasmMsg::Execute {
-            contract_addr: snip_state.addr,
-         
-            msg,
-            send: vec![],
-            callback_code_hash:snip_state.hash,
-        });
-        return Ok(HandleResponse{
-            messages:vec![message],
-            log: vec![],
-            data: None,
-            
-        })
+            SnipState::get_hash(deps)?,
+            SnipState::get_addr(deps)?,
+        );
     }
 
     Ok(HandleResponse::default())
-
 }
 pub fn query<S: Storage, A: Api, Q: Querier>(
     deps: &Extern<S, A, Q>,
@@ -240,9 +149,12 @@ mod tests {
 
     #[test]
     fn proper_initialization() {
-        let mut deps = mock_dependencies(20, &[]);
+        let  deps = mock_dependencies(20, &[]);
 
-        let msg = InitMsg {};
+        let msg = InitMsg {
+            snip_addr: todo!(),
+            snip_hash: todo!(),
+        };
         let env = mock_env("creator", &coins(1000, "earth"));
 
         // we can just call .unwrap() to assert this was a success
@@ -254,7 +166,10 @@ mod tests {
     fn create_room() {
         let mut deps = mock_dependencies(20, &coins(2, "token"));
 
-        let msg = InitMsg {};
+        let msg = InitMsg {
+            snip_addr: todo!(),
+            snip_hash: todo!(),
+        };
         let env = mock_env("creator", &coins(2, "uscrt"));
         let _res = init(&mut deps, env, msg).unwrap();
 
@@ -290,7 +205,10 @@ mod tests {
     fn play() {
         let mut deps = mock_dependencies(20, &coins(2, "token"));
 
-        let msg = InitMsg {};
+        let msg = InitMsg {
+            snip_addr: todo!(),
+            snip_hash: todo!(),
+        };
         let env = mock_env("creator", &coins(2, "uscrt"));
         let _res = init(&mut deps, env, msg).unwrap();
 
@@ -307,17 +225,17 @@ mod tests {
         let ress = handle(&mut deps, env, msg).unwrap();
         println!("{:?}", ress.data);
         let env = mock_env("player1", &coins(40, "uscrt"));
-        let msg = HandleMsg::Play {
+        /*  let msg = HandleMsg::Play {
             move1: Move::Scissors,
             room_id: 1,
-        };
+        };*/
         let _res = handle(&mut deps, env, msg).unwrap();
 
         let env = mock_env("player2", &coins(2, "uscrt"));
-        let msg = HandleMsg::Play {
+        /*let msg = HandleMsg::Play {
             move1: Move::Rock,
             room_id: 1,
-        };
+        };*/
         let res2 = handle(&mut deps, env, msg).unwrap();
         println!("{:#?}", res2.messages);
 

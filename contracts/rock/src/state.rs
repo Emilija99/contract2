@@ -7,13 +7,19 @@ use secret_toolkit::{
 };
 use serde::{Deserialize, Serialize};
 
-use cosmwasm_std::{
-    from_slice, to_vec, Api, CanonicalAddr, Extern, HandleResponse, Querier, StdError, StdResult,
-    Storage, Uint128, HumanAddr,
-};
-use cosmwasm_storage::{PrefixedStorage, ReadonlyPrefixedStorage, Singleton, singleton, ReadonlySingleton, singleton_read};
+use secret_toolkit::snip20::register_receive_msg;
+use secret_toolkit::snip20::transfer_msg;
 
-use crate::msg::Move;
+use cosmwasm_std::{
+    from_slice, to_binary, to_vec, Api, CanonicalAddr, CosmosMsg, Extern, HandleResponse,
+    HumanAddr, InitResponse, Querier, StdError, StdResult, Storage, Uint128, WasmMsg,
+};
+use cosmwasm_storage::{
+    singleton, singleton_read, PrefixedStorage, ReadonlyPrefixedStorage, ReadonlySingleton,
+    Singleton,
+};
+
+use crate::msg::{Move, Snip20Msg};
 
 pub static CONFIG_KEY: &[u8] = b"config";
 
@@ -29,13 +35,64 @@ pub struct Room {
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, JsonSchema)]
-pub struct SnipState{
-    pub addr:HumanAddr,
-    pub hash:String
+pub struct SnipState {
+    pub addr: HumanAddr,
+    pub hash: String,
 }
 
+impl SnipState {
+    pub fn new(addr: HumanAddr, hash: String) -> Self {
+        SnipState { addr, hash }
+    }
+    pub fn get_addr<S: Storage, A: Api, Q: Querier>(
+        deps: &Extern<S, A, Q>,
+    ) -> Result<HumanAddr, StdError> {
+        let conf = config_read(&deps.storage);
+        let snip_state = conf.load()?;
+        Ok(snip_state.addr)
+    }
+    pub fn get_hash<S: Storage, A: Api, Q: Querier>(
+        deps: &Extern<S, A, Q>,
+    ) -> Result<String, StdError> {
+        let conf = config_read(&deps.storage);
+        let snip_state = conf.load()?;
+        Ok(snip_state.hash)
+    }
+    pub fn register<S: Storage, A: Api, Q: Querier>(
+        deps: &mut Extern<S, A, Q>,
 
+        contract_hash: &str,
+    ) -> StdResult<InitResponse> {
+        let conf = config_read(&deps.storage);
+        let snip_state = conf.load()?;
+        let message = register_receive_msg(
+            contract_hash.to_string(),
+            None,
+            0,
+            snip_state.hash,
+            snip_state.addr,
+        )?;
 
+        Ok(InitResponse {
+            messages: vec![message],
+            log: vec![],
+        })
+    }
+    pub fn transfer(
+        recipient: HumanAddr,
+        amount: Uint128,
+        hash: String,
+        conract_addr: HumanAddr,
+    ) -> StdResult<HandleResponse> {
+        let msg = transfer_msg(recipient, amount, None, None, 0, hash, conract_addr)?;
+
+        return Ok(HandleResponse {
+            messages: vec![msg],
+            log: vec![],
+            data: None,
+        });
+    }
+}
 
 pub fn config<S: Storage>(storage: &mut S) -> Singleton<S, SnipState> {
     singleton(storage, CONFIG_KEY)
@@ -58,16 +115,10 @@ impl Room {
     }
     pub fn play(&mut self, player: Player, amount: Uint128) -> StdResult<HandleResponse> {
         if amount.is_zero() {
-            return Err(StdError::GenericErr {
-                msg: "Not enough coins".to_string(),
-                backtrace: None,
-            });
+            return Err(StdError::generic_err("Not enough coins"));
         }
         if self.is_finished {
-            return Err(StdError::GenericErr {
-                msg: "Game already finished".to_string(),
-                backtrace: None,
-            });
+            return Err(StdError::generic_err("Game already finished"));
         }
         if self.player1 == None {
             self.player1 = Some(player);
@@ -75,10 +126,7 @@ impl Room {
             return Ok(HandleResponse::default());
         } else {
             if self.player1.clone().unwrap().address == player.address {
-                return Err(StdError::GenericErr {
-                    msg: "You can't play twice".to_string(),
-                    backtrace: None,
-                });
+                return Err(StdError::generic_err("You can't play twice"));
             }
             self.player2 = Some(player);
             self.amount += amount;
@@ -114,10 +162,7 @@ impl Room {
         let test =
             AppendStoreMut::<Room, _, _>::attach_or_create_with_serialization(&mut store, Json)?;
         let room = test.iter().find(|x| x.as_ref().unwrap().room_id == room_id);
-        room.ok_or(StdError::GenericErr {
-            msg: "Room not found".to_string(),
-            backtrace: None,
-        })?
+        room.ok_or(StdError::generic_err("Room not found"))?
     }
 
     fn next_id<S: Storage, A: Api, Q: Querier>(
@@ -151,10 +196,7 @@ impl Room {
         let index = test
             .iter()
             .position(|r| r.unwrap().room_id == room_id)
-            .ok_or(StdError::GenericErr {
-                msg: "Room not found".to_string(),
-                backtrace: None,
-            })?;
+            .ok_or(StdError::generic_err("Room not found"))?;
         test.set_at(index.try_into().unwrap(), room)?;
 
         Ok(())
@@ -166,19 +208,12 @@ impl Room {
     ) -> Result<Room, StdError> {
         let store = ReadonlyPrefixedStorage::new(b"/rooms/", &deps.storage);
 
-        let test = AppendStore::<Room, _, _>::attach_with_serialization(&store, Json).ok_or(
-            StdError::GenericErr {
-                msg: "Rooms not created".to_string(),
-                backtrace: None,
-            },
-        )??;
+        let test = AppendStore::<Room, _, _>::attach_with_serialization(&store, Json)
+            .ok_or(StdError::generic_err("Rooms not created"))??;
 
         test.iter()
             .find(|x| x.as_ref().unwrap().room_id == room_id)
-            .ok_or(StdError::GenericErr {
-                msg: "Room not found".to_string(),
-                backtrace: None,
-            })?
+            .ok_or(StdError::generic_err("Room not found"))?
     }
 
     pub fn get_rooms<S: Storage, A: Api, Q: Querier>(
@@ -188,17 +223,13 @@ impl Room {
     ) -> Result<Vec<String>, StdError> {
         let store = ReadonlyPrefixedStorage::new(b"/rooms/", &deps.storage);
 
-        let test = AppendStore::<Room, _, _>::attach_with_serialization(&store, Json).ok_or(
-            StdError::GenericErr {
-                msg: "Rooms not created".to_string(),
-                backtrace: None,
-            },
-        )??;
+        let test = AppendStore::<Room, _, _>::attach_with_serialization(&store, Json)
+            .ok_or(StdError::generic_err("Rooms not created"))??;
 
         Ok(test
             .iter()
             .map(|x| x.as_ref().unwrap().room_title.clone())
-            .skip(((page_num-1) * num_of_items).try_into().unwrap())
+            .skip(((page_num - 1) * num_of_items).try_into().unwrap())
             .take(num_of_items.try_into().unwrap())
             .collect::<Vec<String>>())
     }
