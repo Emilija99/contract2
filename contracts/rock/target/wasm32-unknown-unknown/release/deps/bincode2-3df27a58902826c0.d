@@ -1,0 +1,13 @@
+/home/ema/proj1/contracts/rock/target/wasm32-unknown-unknown/release/deps/bincode2-3df27a58902826c0.rmeta: /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/lib.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/config.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/de/mod.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/de/read.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/error.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/internal.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/ser/mod.rs
+
+/home/ema/proj1/contracts/rock/target/wasm32-unknown-unknown/release/deps/libbincode2-3df27a58902826c0.rlib: /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/lib.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/config.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/de/mod.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/de/read.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/error.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/internal.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/ser/mod.rs
+
+/home/ema/proj1/contracts/rock/target/wasm32-unknown-unknown/release/deps/bincode2-3df27a58902826c0.d: /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/lib.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/config.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/de/mod.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/de/read.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/error.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/internal.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/ser/mod.rs
+
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/lib.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/config.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/de/mod.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/de/read.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/error.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/internal.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/bincode2-2.0.1/src/ser/mod.rs:

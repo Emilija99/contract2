@@ -1,0 +1,10 @@
+/contract/target/wasm32-unknown-unknown/release/deps/secret_toolkit_serialization-20ca28895496948c.rmeta: /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/lib.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/base64.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/bincode2.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/json.rs
+
+/contract/target/wasm32-unknown-unknown/release/deps/libsecret_toolkit_serialization-20ca28895496948c.rlib: /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/lib.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/base64.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/bincode2.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/json.rs
+
+/contract/target/wasm32-unknown-unknown/release/deps/secret_toolkit_serialization-20ca28895496948c.d: /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/lib.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/base64.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/bincode2.rs /usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/json.rs
+
+/usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/lib.rs:
+/usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/base64.rs:
+/usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/bincode2.rs:
+/usr/local/cargo/registry/src/github.com-1ecc6299db9ec823/secret-toolkit-serialization-0.2.0/src/json.rs:

@@ -1,0 +1,1 @@
+/home/ema/proj1/target/debug/examples/schema: /home/ema/proj1/contracts/rock/examples/schema.rs /home/ema/proj1/contracts/rock/src/contract.rs /home/ema/proj1/contracts/rock/src/lib.rs /home/ema/proj1/contracts/rock/src/msg.rs /home/ema/proj1/contracts/rock/src/state.rs

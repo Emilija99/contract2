@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HandleMsg",
+  "anyOf": [
+    {
+      "type": "object",
+      "required": [
+        "play"
+      ],
+      "properties": {
+        "play": {
+          "type": "object",
+          "required": [
+            "move1",
+            "room_id"
+          ],
+          "properties": {
+            "move1": {
+              "$ref": "#/definitions/Move"
+            },
+            "room_id": {
+              "type": "integer",
+              "format": "uint64",
+              "minimum": 0.0
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "create_room"
+      ],
+      "properties": {
+        "create_room": {
+          "type": "object",
+          "required": [
+            "room_title"
+          ],
+          "properties": {
+            "room_title": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "register"
+      ],
+      "properties": {
+        "register": {
+          "type": "object",
+          "required": [
+            "reg_addr",
+            "reg_hash"
+          ],
+          "properties": {
+            "reg_addr": {
+              "$ref": "#/definitions/HumanAddr"
+            },
+            "reg_hash": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": [
+        "receive"
+      ],
+      "properties": {
+        "receive": {
+          "type": "object",
+          "required": [
+            "amount",
+            "from",
+            "msg",
+            "sender"
+          ],
+          "properties": {
+            "amount": {
+              "$ref": "#/definitions/Uint128"
+            },
+            "from": {
+              "$ref": "#/definitions/HumanAddr"
+            },
+            "memo": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "msg": {
+              "$ref": "#/definitions/Binary"
+            },
+            "sender": {
+              "$ref": "#/definitions/HumanAddr"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "definitions": {
+    "Binary": {
+      "description": "Binary is a wrapper around Vec<u8> to add base64 de/serialization with serde. It also adds some helper methods to help encode inline.\n\nThis is only needed as serde-json-{core,wasm} has a horrible encoding for Vec<u8>",
+      "type": "string"
+    },
+    "HumanAddr": {
+      "type": "string"
+    },
+    "Move": {
+      "type": "string",
+      "enum": [
+        "rock",
+        "paper",
+        "scissors"
+      ]
+    },
+    "Uint128": {
+      "type": "string"
+    }
+  }
+}

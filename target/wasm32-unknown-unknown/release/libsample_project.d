@@ -1,0 +1,1 @@
+/home/ema/proj1/target/wasm32-unknown-unknown/release/libsample_project.rlib: /home/ema/proj1/contracts/rock/src/contract.rs /home/ema/proj1/contracts/rock/src/lib.rs /home/ema/proj1/contracts/rock/src/msg.rs /home/ema/proj1/contracts/rock/src/state.rs

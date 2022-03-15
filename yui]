@@ -1,0 +1,20 @@
+'{"name":"TOKEN>","symbol":"TKN","decimals":5,"prng_seed":"YXdkYXdkYXdkd2FkYXdkZA==", "config": {"enable_mint": true}}'
+docker exec -it secretdev /bin/bash
+
+secretd tx compute store snip20.wasm.gz --from b --gas 3000000 -y
+secretd tx compute instantiate 1 '{"name":"TOKEN>","symbol":"TKN","decimals":5,"prng_seed":"YXdkYXdkYXdkd2FkYXdkZA==", "config": {"enable_mint": true,"enable_deposit": true}}' --from a --gas 30000000 -y --label "teawdawsttt"
+secretd tx compute execute secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg '{"deposit": {}}' --amount 10000uscrt --from a
+secretd tx compute execute secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg '{"deposit": {}}' --amount 10000uscrt --from b
+secretd q compute list-code 
+secretd q compute list-contract-by-code 1
+
+secretd q compute query secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg '{"balance": {"address":"secret18ncmmmun2cc7wcdl9m2nf4w77ak8r3su3dqxj8", "key":"api_key_TqdVMGV1NjrG07wiEvIgIx4oC0NgTQ4a0/TTfhFW8A0="}}'
+secretd tx compute execute secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg '{"create_viewing_key": {"entropy": "hey"}}' --from secret18ncmmmun2cc7wcdl9m2nf4w77ak8r3su3dqxj8
+secretd q compute tx <TX_HASH>
+secretd tx compute execute secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg '{"send": {"recipient":"secret10pyejy66429refv3g35g2t7am0was7ya6hvrzf", "amount":"100", "msg":"eyJtb3ZlMSI6InJvY2siLCJyb29tX2lkIjowfQ==", "padding":""}}' --from a
+secretd tx compute execute secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg '{"create_viewing_key": {"entropy": "hey"}}' --from secret18ncmmmun2cc7wcdl9m2nf4w77ak8r3su3dqxj8
+secretd tx compute execute secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg '{"send": {"recipient":"secret10pyejy66429refv3g35g2t7am0was7ya6hvrzf", "amount":"1000", "msg":"eyJtb3ZlMSI6InBhcGVyIiwicm9vbV9pZCI6MH0=", "padding":""}}' --from b
+
+secretd q compute query 
+secretd q compute query secret10pyejy66429refv3g35g2t7am0was7ya6hvrzf '{"amount":{"room_id":0}}'
+secretd q compute query secret10pyejy66429refv3g35g2t7am0was7ya6hvrzf '{"winner":{"room_id":0}}'

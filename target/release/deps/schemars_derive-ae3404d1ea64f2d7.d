@@ -1,0 +1,12 @@
+/home/ema/proj1/target/release/deps/libschemars_derive-ae3404d1ea64f2d7.so: /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/lib.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/ast/mod.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/ast/from_serde.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/mod.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/doc.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/schemars_to_serde.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/metadata.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/schema_exprs.rs
+
+/home/ema/proj1/target/release/deps/schemars_derive-ae3404d1ea64f2d7.d: /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/lib.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/ast/mod.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/ast/from_serde.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/mod.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/doc.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/schemars_to_serde.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/metadata.rs /home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/schema_exprs.rs
+
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/lib.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/ast/mod.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/ast/from_serde.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/mod.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/doc.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/attr/schemars_to_serde.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/metadata.rs:
+/home/ema/.cargo/registry/src/github.com-1ecc6299db9ec823/schemars_derive-0.7.6/src/schema_exprs.rs:
