@@ -82,9 +82,9 @@ impl SnipState {
         recipient: HumanAddr,
         amount: Uint128,
         hash: String,
-        conract_addr: HumanAddr,
+        contract_addr: HumanAddr,
     ) -> StdResult<HandleResponse> {
-        let msg = transfer_msg(recipient, amount, None, None, 0, hash, conract_addr)?;
+        let msg = transfer_msg(recipient, amount, None, None, 0, hash, contract_addr)?;
 
         return Ok(HandleResponse {
             messages: vec![msg],
